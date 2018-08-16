@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class Jack
 {
+
+    class JackParticle
+    {
+        public Vector2 Pos;
+        public float Radius;
+        public Color Color;
+
+        public JackParticle(float x, float y, float r, Color c)
+        {
+            this.Pos = new Vector2(x, y);
+            this.Radius = r;
+            this.Color = c;
+        }
+    }
+
     public enum JackState
     {
         OK,
@@ -52,6 +67,8 @@ public class Jack
     public JackState myState;
     public int hitPoints;
 
+    List<JackParticle> particles;
+
     public Jack (Vector2 pos, City city)
     {
         SetPosition(pos);
@@ -60,7 +77,7 @@ public class Jack
         recordedFrames = new List<SwordFrame>();
         hitPoints = 3;
 
-
+        MakeParticles();
     }
 
     void makeSwings() {
@@ -72,10 +89,15 @@ public class Jack
         lsf0.frameTime = 0.0f;
         leftSwing.Add(lsf0);
         SwordFrame lsf1 = new SwordFrame();
-        lsf1.hiltPos = new Vector2(1.0f, 1.0f);
-        lsf1.tipPos = new Vector2(2.0f, 1.5f);
-        lsf1.frameTime = 0.2f;
+        lsf1.hiltPos = new Vector2(1.5f, 0.0f);
+        lsf1.tipPos = new Vector2(2.5f, 0.0f);
+        lsf1.frameTime = 0.1f;
         leftSwing.Add(lsf1);
+        SwordFrame lsf2 = new SwordFrame();
+        lsf2.hiltPos = new Vector2(1.0f, 1.0f);
+        lsf2.tipPos = new Vector2(2.0f, 1.5f);
+        lsf2.frameTime = 0.2f;
+        leftSwing.Add(lsf2);
         Swings.Add(leftSwing);
 
         List<SwordFrame> rightSwing = new List<SwordFrame>();
@@ -85,11 +107,44 @@ public class Jack
         rsf0.frameTime = 0.0f;
         rightSwing.Add(rsf0);
         SwordFrame rsf1 = new SwordFrame();
-        rsf1.hiltPos = new Vector2(1.0f, -1.0f);
-        rsf1.tipPos = new Vector2(2.0f, -1.5f);
-        rsf1.frameTime = 0.2f;
+        rsf1.hiltPos = new Vector2(1.5f, 0.0f);
+        rsf1.tipPos = new Vector2(2.5f, 0.0f);
+        rsf1.frameTime = 0.1f;
         rightSwing.Add(rsf1);
+        SwordFrame rsf2 = new SwordFrame();
+        rsf2.hiltPos = new Vector2(1.0f, -1.0f);
+        rsf2.tipPos = new Vector2(2.0f, -1.5f);
+        rsf2.frameTime = 0.2f;
+        rightSwing.Add(rsf2);
         Swings.Add(rightSwing);
+
+        List<SwordFrame> bigSwing = new List<SwordFrame>();
+        SwordFrame bsf0 = new SwordFrame();
+        bsf0.hiltPos = new Vector2(0.0f, 1.0f);
+        bsf0.tipPos = new Vector2(0.0f, 2.0f);
+        bsf0.frameTime = 0.0f;
+        bigSwing.Add(bsf0);
+        SwordFrame bsf1 = new SwordFrame();
+        bsf1.hiltPos = new Vector2(1.3f, 0.5f);
+        bsf1.tipPos = new Vector2(2.5f, 1.5f);
+        bsf1.frameTime = 0.05f;
+        bigSwing.Add(bsf1);
+        SwordFrame bsf2 = new SwordFrame();
+        bsf2.hiltPos = new Vector2(1.5f, 0.0f);
+        bsf2.tipPos = new Vector2(2.5f, 0.0f);
+        bsf2.frameTime = 0.1f;
+        bigSwing.Add(bsf2);
+        SwordFrame bsf3 = new SwordFrame();
+        bsf3.hiltPos = new Vector2(1.3f, -0.5f);
+        bsf3.tipPos = new Vector2(2.5f, -1.5f);
+        bsf3.frameTime = 0.15f;
+        bigSwing.Add(bsf3);
+        SwordFrame bsf4 = new SwordFrame();
+        bsf4.hiltPos = new Vector2(0.0f, -1.0f);
+        bsf4.tipPos = new Vector2(0.0f, -2.0f);
+        bsf4.frameTime = 0.2f;
+        bigSwing.Add(bsf4);
+        Swings.Add(bigSwing);
     }
 
     public void Update(float deltaSeconds)
@@ -193,6 +248,8 @@ public class Jack
             f = swingDesc[i];
             if (f.frameTime < swingElapsedTime) {
                 prevIndex = i;
+            }
+            else {
                 break;
             }
         }
@@ -201,6 +258,7 @@ public class Jack
             prevIndex = 0;
         }
         int nextIndex = prevIndex + 1;
+        //Debug.Log(string.Format("swing indices {0} {1}", prevIndex, nextIndex));
 
         if (nextIndex == swingDesc.Count) {
             InterpSwordFrames(prevIndex, prevIndex, 0.0f);
@@ -211,7 +269,9 @@ public class Jack
 
             float deltaTimeBetweenFrames = nextFrame.frameTime - prevFrame.frameTime;
             float elapsedTimeSinceStartTime = swingElapsedTime - prevFrame.frameTime;
-            InterpSwordFrames(prevIndex, nextIndex, elapsedTimeSinceStartTime / deltaTimeBetweenFrames);
+            float fracTime = elapsedTimeSinceStartTime / deltaTimeBetweenFrames;
+            //Debug.Log("fracTime: " + fracTime);
+            InterpSwordFrames(prevIndex, nextIndex, fracTime);
         }
     }
 
@@ -264,6 +324,15 @@ public class Jack
         return anyHit;
     }
 
+    public void MakeParticles()
+    {
+        particles = new List<JackParticle>();
+        particles.Add(new JackParticle(0.2f, 0.0f, 0.5f, new Color(0.75f, 0.75f, 0.75f)));
+        particles.Add(new JackParticle(0.0f, 0.6f, 0.5f, Color.white));
+        particles.Add(new JackParticle(0.0f, -0.6f, 0.5f, Color.white));
+        particles.Add(new JackParticle(-0.2f, 0.0f, 0.5f, Color.white));
+    }
+
     public void Draw(Color[] pixels, float cityScale)
     {
         DrawHitPoints(pixels);
@@ -283,6 +352,8 @@ public class Jack
          
         float sizeSqr = DrawRadius * DrawRadius * cityScale * cityScale;
 
+        Quaternion rot = Quaternion.AngleAxis(this.Angle * 180.0f / Mathf.PI, new Vector3(0, 0, 1));
+
         for (int x = 0; x < 64; ++x) {
             float dx = x - 32;
             float dx2 = dx * dx;
@@ -290,7 +361,17 @@ public class Jack
                 float dy = y - 32;
                 float dy2 = dy * dy;
                 if (sizeSqr > (dx2 + dy2)) {
-                    pixels[x + y * 64] = jackColor;
+                    //pixels[x + y * 64] = jackColor;
+                }
+
+                foreach (JackParticle jp in particles) {
+                    Vector2 wpp = myCity.ScreenToWorld(new Vector2Int(x, y));
+                    Vector2 rp = rot * jp.Pos;
+                    Vector2 pp = rp + Position;
+                    if ((pp - wpp).magnitude <= jp.Radius) {
+                        pixels[x + y * 64] = jp.Color;
+                        break;
+                    }
                 }
             }
         }

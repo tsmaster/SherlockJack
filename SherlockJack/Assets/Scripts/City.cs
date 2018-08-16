@@ -520,6 +520,14 @@ public class City
         return new Vector2Int(Mathf.RoundToInt(sx), Mathf.RoundToInt(sy));
     }
 
+    public Vector2 ScreenToWorld(Vector2Int screenPos) {
+        float wx = (screenPos.x - 32) / scale + Jack.Position.x;
+        float wy = (screenPos.y - 32) / scale + Jack.Position.y;
+
+        return new Vector2(wx, wy);
+    }
+
+
     public void RevealClue()
     {
         foreach (Clue c in Clues) {
