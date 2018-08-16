@@ -58,11 +58,14 @@
      <Compile Include="Assets\Scripts\City.cs" />
      <Compile Include="Assets\Scripts\Clue.cs" />
      <Compile Include="Assets\Scripts\GameModes\CharacterTextMode.cs" />
+     <Compile Include="Assets\Scripts\GameModes\CreditsGameMode.cs" />
      <Compile Include="Assets\Scripts\GameModes\GameModeBase.cs" />
+     <Compile Include="Assets\Scripts\GameModes\StartGameMode.cs" />
      <Compile Include="Assets\Scripts\GameModes\TitleGameMode.cs" />
      <Compile Include="Assets\Scripts\Globals.cs" />
      <Compile Include="Assets\Scripts\GridCityPartition.cs" />
      <Compile Include="Assets\Scripts\Jack.cs" />
+     <Compile Include="Assets\Scripts\Mission.cs" />
      <Compile Include="Assets\Scripts\PixelRenderer.cs" />
      <Compile Include="Assets\Scripts\Portal.cs" />
      <Compile Include="Assets\Scripts\SloppyQuadtree.cs" />

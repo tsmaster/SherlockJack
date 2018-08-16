@@ -6,11 +6,7 @@ public class PixelRenderer : MonoBehaviour {
 
     public GameObject Target;
 
-    City city;
-
     Texture2D ScreenBuf;
-
-    Portal portal;
 
     public Texture2D FontTexture;
 
@@ -19,6 +15,7 @@ public class PixelRenderer : MonoBehaviour {
     public Texture2D TitleTexture;
     public Texture2D BeetleTexture;
     public Texture2D PortalTexture;
+    public Texture2D CreditsTexture;
 
     public Texture2D BeetleSpriteTexture;
     public Texture2D ClueCoin1Texture;
@@ -51,12 +48,6 @@ public class PixelRenderer : MonoBehaviour {
 
         ScreenBuf.Apply();
 
-        city = new City();
-
-        city.SetJackPos(Vector2.zero);
-
-        portal = new Portal(city.GetRandomPointOnStreet(), city);
-
         currentMode = new TitleGameMode(TitleTexture);
 
         Globals.FontTex = FontTexture;
@@ -64,6 +55,8 @@ public class PixelRenderer : MonoBehaviour {
         Globals.MakuTex = MakuTexture;
         Globals.BeetleTex = BeetleTexture;
         Globals.PortalTex = PortalTexture;
+        Globals.CreditsTex = CreditsTexture;
+        Globals.TitleTex = TitleTexture;
 
         Globals.BeetleSpriteTex = BeetleSpriteTexture;
         Globals.ClueCoin1Tex = ClueCoin1Texture;
@@ -91,8 +84,10 @@ public class PixelRenderer : MonoBehaviour {
             // walk around city "mode"
             float dt = Time.deltaTime;
 
+            City city = Globals.TheCity;
+
             city.Update(dt);
-            portal.Update(dt);
+            city.portal.Update(dt);
             city.Jack.Update(dt);
             foreach (Beetle b in city.Beetles) {
                 b.Update(dt);
@@ -104,7 +99,7 @@ public class PixelRenderer : MonoBehaviour {
             Vector2 camPos = city.Jack.Position;
             city.Render(camPos);
 
-            portal.Draw(city.Pixels, camPos, city.scale);
+            city.portal.Draw(city.Pixels, camPos, city.scale);
             foreach (Beetle b in city.Beetles) {
                 b.Draw(city.Pixels, camPos, city.scale);
             }
@@ -117,11 +112,37 @@ public class PixelRenderer : MonoBehaviour {
 
             ScreenBuf.SetPixels(city.Pixels);
             ScreenBuf.Apply();
+
+            if (Input.GetKeyDown(KeyCode.H)) {
+                Globals.TheCity.Jack.ShowText("CHEAT");
+                Globals.TheCity.Jack.hitPoints += 1;
+            }
+
+            if (city.portal.myState == Portal.State.Taken) {
+                Globals.TheMission.stagesComplete += 1;
+                if (Globals.TheMission.stagesComplete == 3) {
+                    List<LineDesc> lines = CharacterTextMode.MakeMissionSuccessDialog();
+                    currentMode = new CharacterTextMode(Globals.FontTex, lines);
+                }
+                else {
+                    Globals.TheCity = new City();
+                    Globals.TheCity.Start(3 + 2 * Globals.TheMission.stagesComplete);
+                    List<LineDesc> lines = CharacterTextMode.MakeCitySuccessDialog();
+                    currentMode = new CharacterTextMode(Globals.FontTex, lines);
+                }
+            }
+
+            if (city.Jack.hitPoints == 0) {
+                List<LineDesc> lines = CharacterTextMode.MakeJackDeathDialog();
+                currentMode = new CharacterTextMode(Globals.FontTex, lines);
+            }
         }
 	}
 
     void DrawPadlock(Color[] pixels) 
     {
+        City city = Globals.TheCity;
+
         foreach (Beetle b in city.Beetles) {
             if (b.myState == Beetle.State.Alive) {
                 DrawPadlockBlip(b.Position, Color.black, pixels);
@@ -134,14 +155,14 @@ public class PixelRenderer : MonoBehaviour {
             }
         }
 
-        if (portal.myState == Portal.State.Revealed) {
-            DrawPadlockBlip(portal.Position, Color.white, pixels);
+        if (city.portal.myState == Portal.State.Revealed) {
+            DrawPadlockBlip(city.portal.Position, Color.white, pixels);
         }
     }
 
     void DrawPadlockBlip(Vector2 worldPos, Color blipColor, Color[] pixels) {
-        Vector2 worldRelPos = worldPos - city.Jack.Position;
-        Vector2 normScreenRelPos = worldRelPos * city.scale;
+        Vector2 worldRelPos = worldPos - Globals.TheCity.Jack.Position;
+        Vector2 normScreenRelPos = worldRelPos * Globals.TheCity.scale;
 
         if ((Mathf.Abs(normScreenRelPos.x) < 32.0f) &&
             (Mathf.Abs(normScreenRelPos.y) < 32.0f)) {

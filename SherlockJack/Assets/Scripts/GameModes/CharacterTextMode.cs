@@ -150,6 +150,14 @@ public class CharacterTextMode : GameModeBase
 
     override public GameModeBase GetNextMode()
     {
+        if (Globals.TheMission.stagesComplete >= 3) {
+            return new CreditsGameMode();
+        }
+
+        if (Globals.TheCity.Jack.hitPoints == 0) {
+            return new TitleGameMode(Globals.TitleTex);
+        }
+
         return null;
     }
 
@@ -158,7 +166,7 @@ public class CharacterTextMode : GameModeBase
         return lineIndex >= lines.Count;
     }
 
-    public static List<LineDesc> MakeDialog() {
+    public static List<LineDesc> MakeIntroDialog() {
         List<LineDesc> lines = new List<LineDesc>();
 
         lines.Add(new LineDesc(Speaker.Jack, true, "MAKURITY!"));
@@ -170,6 +178,27 @@ public class CharacterTextMode : GameModeBase
         lines.Add(new LineDesc(Speaker.Portal, false, "THAT GUARD THE TIME PORTAL THAT YOU SEEK!"));
         lines.Add(new LineDesc(Speaker.Maku, false, "AH HAH HAH HAH HAH!!!"));
 
+        return lines;
+    }
+
+    public static List<LineDesc> MakeCitySuccessDialog() {
+        List<LineDesc> lines = new List<LineDesc>();
+        lines.Add(new LineDesc(Speaker.Jack, true, "WHAT TRICKERY IS THIS?"));
+        lines.Add(new LineDesc(Speaker.Maku, false, "FOOLISH SAMURAI!!!"));
+        lines.Add(new LineDesc(Speaker.Maku, false, "THAT WAS NOT THE TIME PORTAL YOU SEEK."));
+        lines.Add(new LineDesc(Speaker.Maku, false, "AH HAH HAH HAH HAH!!!"));
+        return lines;
+    }
+
+    public static List<LineDesc> MakeMissionSuccessDialog() {
+        List<LineDesc> lines = new List<LineDesc>();
+        lines.Add(new LineDesc(Speaker.Maku, false, "NO! YOU WIN!"));
+        return lines;
+    }
+
+    public static List<LineDesc> MakeJackDeathDialog() {
+        List<LineDesc> lines = new List<LineDesc>();
+        lines.Add(new LineDesc(Speaker.Maku, false, "I WIN! I WILL ALWAYS WIN, SAMURAI!"));
         return lines;
     }
 }

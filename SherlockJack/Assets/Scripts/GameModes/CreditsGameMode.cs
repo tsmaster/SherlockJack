@@ -1,23 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class TitleGameMode : GameModeBase
+public class CreditsGameMode : GameModeBase
 {
     Color[] pixels;
 
-    public TitleGameMode (Texture2D titleTexture)
+    public CreditsGameMode ()
     {
-        pixels = titleTexture.GetPixels();
+        pixels = Globals.CreditsTex.GetPixels();
     }
 
     override public void Update(float seconds)
     {
         base.Update(seconds);
-
-        if (ElapsedTime > 2.0f) {
-            // advance mode
-
-        }
     }
 
     override public void Draw(Color[] outbuf)
@@ -29,13 +24,13 @@ public class TitleGameMode : GameModeBase
 
     override public bool IsComplete()
     {
-        return (ElapsedTime > 2.0f);
+        return (ElapsedTime > 12.0f);
     }
 
     override public GameModeBase GetNextMode()
     {
-        if (ElapsedTime > 2.0f) {
-            return new StartGameMode();
+        if (ElapsedTime > 12.0f) {
+            return new TitleGameMode(Globals.TitleTex);
         }
         else {
             return null;

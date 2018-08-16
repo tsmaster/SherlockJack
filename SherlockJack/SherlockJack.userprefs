@@ -1,0 +1,19 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameModes/CharacterTextMode.cs">
+    <Files>
+      <File FileName="Assets/Scripts/GameModes/CharacterTextMode.cs" Line="158" Column="56" />
+      <File FileName="Assets/Scripts/Mission.cs" Line="6" Column="1" />
+      <File FileName="Assets/Scripts/PixelRenderer.cs" Line="137" Column="52" />
+      <File FileName="Assets/Scripts/Globals.cs" Line="5" Column="36" />
+      <File FileName="Assets/Scripts/GameModes/TitleGameMode.cs" Line="27" Column="10" />
+      <File FileName="Assets/Scripts/GameModes/StartGameMode.cs" Line="11" Column="9" />
+      <File FileName="Assets/Scripts/City.cs" Line="122" Column="61" />
+      <File FileName="Assets/Scripts/GameModes/CreditsGameMode.cs" Line="33" Column="54" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

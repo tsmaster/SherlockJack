@@ -226,6 +226,7 @@ MonoBehaviour:
   TitleTexture: {fileID: 2800000, guid: d5c01eee23ef64fe58929847a3fbbb19, type: 3}
   BeetleTexture: {fileID: 2800000, guid: c7b241aeab71e48af8d4bf07046b60c4, type: 3}
   PortalTexture: {fileID: 2800000, guid: bf7dcd84130c34263b278996e2586787, type: 3}
+  CreditsTexture: {fileID: 2800000, guid: 353e11368f22b4616a3ecc173d190f39, type: 3}
   BeetleSpriteTexture: {fileID: 2800000, guid: 06f41c31a4f144a7c88144a81632f3ba, type: 3}
   ClueCoin1Texture: {fileID: 2800000, guid: fd32e4360daac465886c9b4fb55fe51a, type: 3}
   ClueCoin2Texture: {fileID: 2800000, guid: b27fd9946b1bc47968efe15db664a933, type: 3}

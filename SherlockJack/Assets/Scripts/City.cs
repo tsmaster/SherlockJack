@@ -101,6 +101,8 @@ public class City
     float spawnTimer;
     const float MAX_SPAWN_TIME = 10.0f;
 
+    public Portal portal;
+
     public City ()
     {
         Streets = new List<StreetSegment>();
@@ -114,12 +116,16 @@ public class City
         }
 
         Pixels = new Color[64 * 64];
+    }
+
+    public void Start(int numClues) {
+        portal = new Portal(GetRandomPointOnStreet(), this);
 
         Vector2 jackPos = Vector2.zero;
         SpawnJack(jackPos);
         Beetles = new List<Beetle>();
         SpawnBeetles(2, jackPos);
-        SpawnClues(3, jackPos);
+        SpawnClues(numClues, jackPos);
 
         spawnTimer = 2 * MAX_SPAWN_TIME;
     }
